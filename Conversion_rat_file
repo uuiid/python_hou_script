@@ -1,0 +1,63 @@
+#  version1.0  user houdini 17.0
+
+
+import hou
+
+import os
+
+iconvert = hou.houdiniPath()[4] + '/' + "iconvert.exe"
+
+folder = hou.ui.readInput("file_path")
+folder = folder[1] + "/"
+
+files = os.listdir(folder)
+
+dot = "."
+
+extension = "rat"
+
+exts = ('.exr', '.jpg', '.tga', '.png','.tif', '.hdr', '.tx')
+
+def rat_folder():
+
+    for file in files:
+
+        file_ext = os.path.splitext(file)[1]
+
+        if file_ext in exts:       
+
+            export = iconvert + ' ' + '"' + folder + file + '"' + ' ' + '"' + folder + os.path.splitext(file)[0] + dot + extension + '"'
+            print(export)
+            exists = os.path.exists(folder + os.path.splitext(file)[0] + dot + extension)
+            print(exists)
+
+            if exists is True:
+
+                status = "File exists. Skipping..."
+
+            else:
+
+                os.system(export)
+
+                status = "Success!"
+
+            print "----------------------------------------------"
+
+            print "RAT FOLDER STATUS: " + status
+
+            print "original=" + folder + file
+
+            print "new=" + folder + file[:-4] + dot + extension
+
+            print "----------------------------------------------"
+
+if folder != '':
+    
+    safety = hou.ui.displayMessage("Are you sure you want to convert all images in " + folder + " ?", buttons=('Yes', 'No'))
+
+    if safety == 0 and folder != '':
+
+        rat_folder()
+
+#C:\Users\0000\OneDrive\temp2\tex 
+
